@@ -1,8 +1,8 @@
 # nginx_sticky_module_ng
 Fork of https://bitbucket.org/nginx-goodies/nginx-sticky-module-ng/, tag version `1.2.6` and hash `c78b7dd79d0d`.
 
-## NGINX 1.24.x compatibility
-Patches were developed and applied in sticky module to guarantee compatibility to NGINX 1.24.x branch.
+## NGINX 1.26.x compatibility
+Patches were developed and applied in sticky module to guarantee compatibility to NGINX 1.26.x branch.
 
 ## Compiling this module as Dynamic Module
 Here are my references to build this module as Dynamic Module:
@@ -14,9 +14,9 @@ https://www.nginx.com/resources/wiki/extending/converting/
 `Step 1`: Verify and obtain the NGINX Open Source Release
 
     $ nginx -v
-    nginx version: nginx/1.24.0
-    $ wget https://nginx.org/download/nginx-1.24.0.tar.gz
-    $ tar -xzf nginx-1.24.0.tar.gz
+    nginx version: nginx/1.26.0
+    $ wget https://nginx.org/download/nginx-1.26.0.tar.gz
+    $ tar -xzf nginx-1.26.0.tar.gz
 
 `Step 2`: Obtain the Sticky Module Sources
 
@@ -24,7 +24,7 @@ https://www.nginx.com/resources/wiki/extending/converting/
 
 `Step 3`: Compile the Sticky Dynamic Module
 
-    $ cd nginx-1.24.0/
+    $ cd nginx-1.26.0/
     $ ./configure --with-compat --add-dynamic-module=../nginx_sticky_module_ng
     $ make modules
 
@@ -59,6 +59,8 @@ https://www.nginx.com/resources/wiki/extending/converting/
     ...
 
 ## Versioning
+v0.0.2 - 2024-04-23 - tested against nginx 1.26.0
+
 v0.0.2 - 2023-06-23 - nginx 1.24.x sticky DYNAMIC module compilation compatibility
 
 v0.0.1 - 2023-06-18 - nginx 1.24.x sticky module compatibility
