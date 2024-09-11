@@ -1,0 +1,38 @@
+name: Build NGINX Sticky Module
+
+on:
+  workflow_dispatch: # This allows the workflow to be run manually
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Set up prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev git
+
+      - name: Verify and obtain the NGINX Open Source Release
+        run: |
+          nginx -v || echo "NGINX is not installed. Proceeding to download."
+          wget https://nginx.org/download/nginx-1.26.0.tar.gz
+          tar -xzf nginx-1.26.0.tar.gz
+
+      - name: Obtain the Sticky Module Sources
+        run: git clone https://github.com/fabianofurtado/nginx_sticky_module_ng.git
+
+      - name: Compile the Sticky Dynamic Module
+        run: |
+          cd nginx-1.26.0/
+          ./configure --with-compat --add-dynamic-module=../nginx_sticky_module_ng
+          make modules
+
+      - name: Save output as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nginx-sticky-module
+          path: nginx-1.26.0/objs/nginx_sticky_module.so
