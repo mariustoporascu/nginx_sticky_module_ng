@@ -19,25 +19,25 @@ jobs:
       - name: Verify and obtain the NGINX Open Source Release
         run: |
           nginx -v || echo "NGINX is not installed. Proceeding to download."
-          wget https://nginx.org/download/nginx-1.26.0.tar.gz
-          tar -xzf nginx-1.26.0.tar.gz
+          wget https://nginx.org/download/nginx-1.26.2.tar.gz
+          tar -xzf nginx-1.26.2.tar.gz
 
       - name: Obtain the Sticky Module Sources
         run: git clone https://github.com/fabianofurtado/nginx_sticky_module_ng.git
 
       - name: Compile the Sticky Dynamic Module
         run: |
-          cd nginx-1.26.0/
+          cd nginx-1.26.2/
           ./configure --with-compat --add-dynamic-module=../nginx_sticky_module_ng
           make modules
 
       - name: List output files for debugging
         run: |
-          ls -l nginx-1.26.0/objs/
-          find nginx-1.26.0/objs/ -name "*.so"
+          ls -l nginx-1.26.2/objs/
+          find nginx-1.26.2/objs/ -name "*.so"
 
       - name: Save output as artifact
         uses: actions/upload-artifact@v3
         with:
           name: nginx-sticky-module
-          path: nginx-1.26.0/objs/ngx_http_sticky_module.so
+          path: nginx-1.26.2/objs/ngx_http_sticky_module.so
