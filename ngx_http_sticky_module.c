@@ -112,7 +112,7 @@ ngx_int_t ngx_http_init_upstream_sticky(ngx_conf_t *cf, ngx_http_upstream_srv_co
 	ngx_uint_t i;
 
 	/* call the rr module on wich the sticky module is based on */
-	if (ngx_http_upstream_init_round_robin(cf, us) != NGX_OK) {
+	if (ngx_http_upstream_init_least_conn(cf, us) != NGX_OK) {
 		return NGX_ERROR;
 	}
 
@@ -189,7 +189,7 @@ static ngx_int_t ngx_http_init_sticky_peer(ngx_http_request_t *r, ngx_http_upstr
 	r->upstream->peer.data = &iphp->rrp;
 
 	/* call the rr module on which the sticky is based on */
-	if (ngx_http_upstream_init_round_robin_peer(r, us) != NGX_OK) {
+	if (ngx_http_upstream_init_least_conn_peer(r, us) != NGX_OK) {
 		return NGX_ERROR;
 	}
 
@@ -197,7 +197,7 @@ static ngx_int_t ngx_http_init_sticky_peer(ngx_http_request_t *r, ngx_http_upstr
 	r->upstream->peer.get = ngx_http_get_sticky_peer;
 
 	/* init the custom sticky struct */
-	iphp->get_rr_peer = ngx_http_upstream_get_round_robin_peer;
+	iphp->get_rr_peer = ngx_http_upstream_get_least_conn_peer;
 	iphp->selected_peer = -1;
 	iphp->no_fallback = 0;
 	iphp->sticky_conf = ngx_http_conf_upstream_srv_conf(us, ngx_http_sticky_module);
@@ -361,7 +361,7 @@ static ngx_int_t ngx_http_get_sticky_peer(ngx_peer_connection_t *pc, void *data)
 
 		ngx_int_t ret = iphp->get_rr_peer(pc, &iphp->rrp);
 		if (ret != NGX_OK) {
-			ngx_log_debug(NGX_LOG_DEBUG_HTTP, pc->log, 0, "[sticky/get_sticky_peer] ngx_http_upstream_get_round_robin_peer returned %i", ret);
+			ngx_log_debug(NGX_LOG_DEBUG_HTTP, pc->log, 0, "[sticky/get_sticky_peer] ngx_http_upstream_get_least_conn_peer returned %i", ret);
 			return ret;
 		}
 
